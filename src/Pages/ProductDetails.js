@@ -31,10 +31,10 @@ export default class ProductDetails extends Component {
         this.getid()
     }
     getid=()=>{
-        // const id = this.props.match.params.id //  working
-        // console.log('id = ',id);
+        const id = this.props.match.params.id //  working
+        console.log('id = ',id);
         this.setState({
-            id:"id"
+            id:id
         })
         
     }
@@ -52,7 +52,7 @@ export default class ProductDetails extends Component {
       
     }
     render() {
-        
+        const pageName = "Product / "+this.state.id
         return (
             <div>
             <div className="page-wrapper">
@@ -66,7 +66,7 @@ export default class ProductDetails extends Component {
                 <div className="main-content">
                   <div className="section__content section__content--p30">
                     <div className="container-fluid">
-                    <PageHead name="Products"/>
+                    <PageHead name={pageName}/>
                     
                   <div className="row mt-3">
                     <div className="au-card col-lg-12">
@@ -235,69 +235,8 @@ export default class ProductDetails extends Component {
               
               </div>
             </div>
-            
-
-                        {/* <div className="au-card m-b-30"> */}
-                            {/* <div className="au-card-inner"> */}
-
-                            
-                              
-
-
-                              
-                              {/* <img 
-                              style={ImageMain}
-                              src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg" />
-                              <br/>
-
-                              <input 
-                              name="selectedFile1"
-                              style={{
-                                display:"none",
-                              }}
-                              
-                              onChange={this.fileSelectHandler}
-                              type="file"
-                              ref={fileInput1=>this.fileInput1=fileInput1}
-                              /> 
-
-                              <button
-                              style={FileInputPlus}
-                              onClick={()=>this.fileInput1.click()} ><i className="fa fa-plus fa-4x text-white" aria-hidden="true"></i></button>
-                              
-                              <input 
-                              name="selectedFile2"
-                              style={{display:"none"}}
-                              onChange={this.fileSelectHandler}
-                              type="file"
-                              ref={fileInput2=>this.fileInput2=fileInput2}
-                              /> 
-                              <button 
-                              className="ml-2"
-                              style={FileInputPlus}
-                              onClick={()=>this.fileInput2.click()} ><i className="fa fa-plus fa-4x text-white" aria-hidden="true"></i></button>
-
-                              <input 
-                              name="selectedFile3"
-                              style={{display:"none"}}
-                              onChange={this.fileSelectHandler}
-                              type="file"
-                              ref={fileInput3=>this.fileInput3=fileInput3}
-                              /> 
-                              <button 
-                              style={FileInputPlus}
-                              onClick={()=>this.fileInput3.click()} ><i className="fa fa-plus fa-4x text-white" aria-hidden="true"></i></button>
-
-
-                              <button onClick={this.fileUploadHandler} > Upload</button> */}
-
-                            {/* </div> */}
-                        {/* </div> */}
-
-
                     </div>
                   </div>
-          
           
                     </div>
                   </div>
