@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import "./mycss.css"
+
 import ImgsViewer from 'react-images-viewer'
 import {
     Magnifier,
@@ -14,13 +16,9 @@ export default class App extends Component {
         return (
             <div>
                 
-                <Magnifier
-                    imageSrc="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg"
-                    imageAlt="Example"
-                    largeImageSrc="./large-image.jpg" // Optional
-                    mouseActivation={MOUSE_ACTIVATION.DOUBLE_CLICK} // Optional
-                    touchActivation={TOUCH_ACTIVATION.DOUBLE_TAP} // Optional
-                    />
+                <div className="back">
+                                    back div
+                </div>
             </div>
         )
     }

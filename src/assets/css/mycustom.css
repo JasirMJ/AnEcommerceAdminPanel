@@ -10,3 +10,8 @@
     border-radius:10;
 
 }
+.back{
+    background-color: red;
+    height: 300;
+    width: 400;
+}

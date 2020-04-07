@@ -8,6 +8,8 @@ import Brand from "./Pages/Brand"
 import Payements from "./Pages/Payements"
 import Notification from "./Pages/Notification"
 
+import Pd from "./Pages/Pd"
+
 import React from "react";
 import { Offline, Online } from "react-detect-offline";
 
@@ -56,6 +58,7 @@ export default class App extends React.Component {
                                     <Route exact path="/notifications" component={Notification}></Route>
                                     <Route exact path="/brands" component={Brand}></Route>
                                     <Route exact path="/categorys" component={Category}></Route>
+                                    <Route exact path="/pd" component={Pd}></Route>
                                     <Route exact  path="/"><Dashboard /></Route>  
                                 </Switch>
                             </div>

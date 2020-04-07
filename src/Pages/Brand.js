@@ -15,8 +15,6 @@ function App() {
   <div className="page-wrapper">
     <Header/>
     <Navigation/>
-    
-    
     {/* PAGE CONTAINER */}
     <div className="page-container">
       <HeaderDesktop/>

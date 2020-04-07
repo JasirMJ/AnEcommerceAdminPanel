@@ -43,6 +43,9 @@ export default class Navigation extends Component {
                     <li>
                     <Link to="/brands">   <i className="fas fa-chart-bar" />Brand</Link>
                     </li>
+                    <li>
+                    <Link to="/pd">   <i className="fas fa-chart-bar" />Pd</Link>
+                    </li>
                 </ul>
                 </nav>
             </div>

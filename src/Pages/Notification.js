@@ -107,6 +107,7 @@ function App() {
                     </tbody>
                   </table>
                 </div>
+              
               </div>
               <div className="col-lg-3">
                 <div className="au-card au-card--bg-blue au-card-top-countries m-b-40">
