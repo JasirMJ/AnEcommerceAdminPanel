@@ -7,13 +7,15 @@ import PageHead from "./Components/PageHead"
 import DashboardCards from "./Components/DashboardCards"
 
 
-function App() {
-  return (
+class App extends React.Component {
+  render()
+  {
+    return (
 
  <div>
   <div className="page-wrapper">
     <Header/>
-    <Navigation/>
+    {/* <Navigation/> */}
     
     {/* PAGE CONTAINER */}
     <div className="page-container">
@@ -100,5 +102,7 @@ function App() {
 </div>
 
   );
+  }
+  
 }
 export default App

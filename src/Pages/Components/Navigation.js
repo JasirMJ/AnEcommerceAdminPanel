@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 import {
     Link
 } from "react-router-dom";
+import logo from "../../assets/images/icon/logo.png"
 
 export default class Navigation extends Component {
     render() {
         return (
             <>
             {/* MENU SIDEBAR */}
-            <aside className="menu-sidebar d-none d-lg-block">
+            <aside className="menu-sidebar d-none d-md-block">
             <div className="logo">
                 <a href="#">
-                <img src="images/icon/logo.png" alt="Cool Admin" />
+                <img src={logo} alt="Cool Admin" />
                 </a>
             </div>
             <div className="menu-sidebar__content js-scrollbar1">
@@ -55,3 +56,4 @@ export default class Navigation extends Component {
         )
     }
 }
+

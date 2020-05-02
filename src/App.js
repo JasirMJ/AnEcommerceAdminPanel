@@ -7,11 +7,14 @@ import Category from "./Pages/Category"
 import Brand from "./Pages/Brand"
 import Payements from "./Pages/Payements"
 import Notification from "./Pages/Notification"
+import Login from './Pages/Login'
 
 import Pd from "./Pages/Pd"
 
 import React from "react";
 import { Offline, Online } from "react-detect-offline";
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // import logo from './Pages/assets/img/brand/blue.png'
 
@@ -50,6 +53,7 @@ export default class App extends React.Component {
                         <Router>
                             <div>
                                 <Switch>
+                                    <Route exact path="/login"><Login /></Route>
                                     <Route exact path="/products"><Products /></Route>
                                     <Route exact path="/products/:id" component={ProductDetails}></Route>
                                     <Route exact path="/orders" component={Order}></Route>
@@ -59,7 +63,7 @@ export default class App extends React.Component {
                                     <Route exact path="/brands" component={Brand}></Route>
                                     <Route exact path="/categorys" component={Category}></Route>
                                     <Route exact path="/pd" component={Pd}></Route>
-                                    <Route exact  path="/"><Dashboard /></Route>  
+                                    <Route exact  path="/" component={Dashboard}></Route>  
                                 </Switch>
                             </div>
                         </Router>

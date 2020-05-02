@@ -57,7 +57,7 @@ export default class ProductDetails extends Component {
             <div>
             <div className="page-wrapper">
               <Header/>
-              <Navigation/>
+              {/* <Navigation/> */}
               
               {/* PAGE CONTAINER */}
               <div className="page-container">

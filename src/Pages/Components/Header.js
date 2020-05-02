@@ -2,98 +2,108 @@ import React, { Component } from 'react'
 // import axios from 'axios'
 // import Base from './Config'
 import logo from '../../assets/images/icon/logo.png'
+import Navigation from "./Navigation"
+import axios from 'axios'
+import Base from '../Config'
+import {
+    Link, 
+    Redirect
+} from 'react-router-dom'
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
-export default class componentName extends Component {
-    // constructor(){
-    //     super()
-    //     this.state={
-    //         data:[],
-    //         next:null,
-    //         prev:null,
-    //         loading:true,
+class DropDownMenu extends Component {
+  
+    // constructor() {
+    //     super();
+    //     const token = localStorage.getItem('ecommerce_token')
+    //     // const token = null
+    //     let loggedIn=true
+    //     if(token == null){
+    //       loggedIn=false
     //     }
-    // }
-
-    // loading=(args)=>{
-    //     this.setState({
-    //         loading:args
-    //     })
-    // }
-
-    // componentDidMount(){
-    //     this.fetchAllData()
-    // }
-
-    // next=()=>{
-    //     this.loading(true)
-    //     axios.get(
-    //       this.state.next,
-    //       { 
-    //           headers: { 
-    //             'Authorization': 'Token '+localStorage.getItem('Token'),
-    //           } 
-    //       }
-    //     ).then(response =>{
-    //       this.setState({
-    //         data:response.data.results,
-    //         next:response.data.next,
-    //         prev:response.data.previous,
-    //         loading:false, 
-
-    //       })
-    //     })
-    //     .catch(error =>{
-    //         alert('Error : ', error, 3000);
-    //     })
-    // }
-
-    // prev=()=>{
-    //     this.loading(true)
-    //     axios.get(
-    //       this.state.prev,
-    //       { 
-    //           headers: { 
-    //               'Authorization': 'Token '+localStorage.getItem('Token'),
-    //           } 
-    //       }
-    //     ).then(response =>{
-    //       this.setState({
-    //         data:response.data.results,
-    //         next:response.data.next,
-    //         prev:response.data.previous,
-    //         loading:false,
-    //       })
-    //     })
-    //     .catch(error =>{
-    //         alert('Error : ', error, 3000);
-    //     })
-    // }
-
-    // fetchAllData(){
-    //     this.loading(true)
-    //     axios.get(
-    //         Base.url + 'url',
+    //     this.state = {
+    //       loggedIn,
+    //       loggedOut:false
+    //     };
+        
+    //     this.logout = this.logout.bind(this)
+    //   }
+    //   submit = () => {
+    //     confirmAlert({
+    //       title: 'Logging out',
+    //       message: 'Are you sure ?',
+    //       buttons: [
     //         {
-    //             headers: {
-    //                 'Authorization': 'Token ' + localStorage.getItem('Token'),
+    //             label: 'Yes',
+    //             onClick: () => {
+    //             this.setState({
+    //                 loggedIn:false,
+    //                 loggedOut:true
+    //             })
+    //             // var userId = localStorage.getItem('userId')
+    //             // console.log("userId : ",userId)
+    //             // this.removeAdminToken(userId)
+    //             localStorage.removeItem('ecommerce_token')
+
+    //             }
+    //         },
+    //         {
+    //             label: 'No',
+    //             onClick: () => {
+    //               //nothing
     //             }
     //         }
-    //     ).then(response => {
-    //         console.log('Response all :', response);
-    //         console.log('Response all :', response.data.results);
+    //       ]
+    //     });
+    //   }
 
-    //         this.setState({
-    //             data: response.data.results,
-    //             next: response.data.next,
-    //             prev: response.data.previous,
-    //             loading:false,
-    //         })
-    //     }).catch(error => {
-    //         console.log('Error loading quotation count: ', error);
-    //         alert('Error : ', error, 3000);
+    //   removeAdminToken=(token)=>{
+    //     // console.log('token ',token);
+        
+    //     // return false 
+    //     axios.delete(
+    //         Base.url + 'AdminNotificationTokens/?token='+token,
+    //         {
+    //             headers: {
+    //                 'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+    //             }
+    //         }
+    //     )
+    //     .then(response =>{
+    //         // console.log('response : ',response.data.Message);
+    //     })
+    //     .catch(error=>{
+    //         console.log(error);
     //     })
     // }
 
+    // logout(){
+    //     this.submit()
+    // }
+
+    render() {
+    // if(this.state.loggedOut===true){
+    //     return <Redirect to='/login'/>  
+    // }
+    // if(this.state.loggedIn === false){
+    //     NotificationManager.info('Info : ','Please login first', 5000)
+
+    //     return <Redirect to='/login'/>
+    // }
+
+
+    return (
+        <div>
+        <i className="fas fa-sign-out-alt fa-2x logout "  onClick={this.logout} ></i>
+        </div>
+    );
+    }
+}
+
+export default class componentName extends Component {
+    
     render() {
         return (
             <>
@@ -105,7 +115,7 @@ export default class componentName extends Component {
                     <a className="logo" href="index.html">
                     <img src={logo} alt="CoolAdmin" />
                     </a>
-                    <button className="hamburger hamburger--slider" type="button">
+                    <button className="hamburger hamburger--slider" type="button" onClick={()=>console.log("clicked menu")}>
                     <span className="hamburger-box">
                         <span className="hamburger-inner" />
                     </span>
@@ -113,106 +123,10 @@ export default class componentName extends Component {
                 </div>
                 </div>
             </div>
-            <nav className="navbar-mobile">
-                <div className="container-fluid">
-                <ul className="navbar-mobile__list list-unstyled">
-                    <li className="has-sub">
-                    <a className="js-arrow" href="#">
-                        <i className="fas fa-tachometer-alt" />Dashboard</a>
-                    <ul className="navbar-mobile-sub__list list-unstyled js-sub-list">
-                        <li>
-                        <a href="index.html">Dashboard 1</a>
-                        </li>
-                        <li>
-                        <a href="index2.html">Dashboard 2</a>
-                        </li>
-                        <li>
-                        <a href="index3.html">Dashboard 3</a>
-                        </li>
-                        <li>
-                        <a href="index4.html">Dashboard 4</a>
-                        </li>
-                    </ul>
-                    </li>
-                    <li>
-                    <a href="chart.html">
-                        <i className="fas fa-chart-bar" />Charts</a>
-                    </li>
-                    <li>
-                    <a href="table.html">
-                        <i className="fas fa-table" />Tables</a>
-                    </li>
-                    <li>
-                    <a href="form.html">
-                        <i className="far fa-check-square" />Forms</a>
-                    </li>
-                    <li>
-                    <a href="calendar.html">
-                        <i className="fas fa-calendar-alt" />Calendar</a>
-                    </li>
-                    <li>
-                    <a href="map.html">
-                        <i className="fas fa-map-marker-alt" />Maps</a>
-                    </li>
-                    <li className="has-sub">
-                    <a className="js-arrow" href="#">
-                        <i className="fas fa-copy" />Pages</a>
-                    <ul className="navbar-mobile-sub__list list-unstyled js-sub-list">
-                        <li>
-                        <a href="login.html">Login</a>
-                        </li>
-                        <li>
-                        <a href="register.html">Register</a>
-                        </li>
-                        <li>
-                        <a href="forget-pass.html">Forget Password</a>
-                        </li>
-                    </ul>
-                    </li>
-                    <li className="has-sub">
-                    <a className="js-arrow" href="#">
-                        <i className="fas fa-desktop" />UI Elements</a>
-                    <ul className="navbar-mobile-sub__list list-unstyled js-sub-list">
-                        <li>
-                        <a href="button.html">Button</a>
-                        </li>
-                        <li>
-                        <a href="badge.html">Badges</a>
-                        </li>
-                        <li>
-                        <a href="tab.html">Tabs</a>
-                        </li>
-                        <li>
-                        <a href="card.html">Cards</a>
-                        </li>
-                        <li>
-                        <a href="alert.html">Alerts</a>
-                        </li>
-                        <li>
-                        <a href="progress-bar.html">Progress Bars</a>
-                        </li>
-                        <li>
-                        <a href="modal.html">Modals</a>
-                        </li>
-                        <li>
-                        <a href="switch.html">Switchs</a>
-                        </li>
-                        <li>
-                        <a href="grid.html">Grids</a>
-                        </li>
-                        <li>
-                        <a href="fontawesome.html">Fontawesome Icon</a>
-                        </li>
-                        <li>
-                        <a href="typo.html">Typography</a>
-                        </li>
-                    </ul>
-                    </li>
-                </ul>
-                </div>
-            </nav>
             </header>
             {/* END HEADER MOBILE */}
+            <Navigation/>
+
             </>
         );
     }
