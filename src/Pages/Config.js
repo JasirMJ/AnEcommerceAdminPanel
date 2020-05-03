@@ -30,7 +30,6 @@ export default {
 // var bodyFormData = new FormData();
 // bodyFormData.set('username', username);
 // bodyFormData.set('password', password);
-
 // axios.post(
 //     Base.url + 'Login/',
 //     bodyFormData,

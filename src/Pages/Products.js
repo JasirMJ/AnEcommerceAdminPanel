@@ -8,63 +8,101 @@ import {
 } from "react-router-dom";
 import "./product.css"
 
-class ProductsComponent extends PureComponent{
-    render(){
-        const data = this.props.data
-        return(
-          <div className="col-md-3">
-            <figure className="card card-product">
-              <div className="img-wrap"> 
-                <img src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg" />
-                {/* <a className="btn-overlay" href="#"><i className="fa fa-search-plus" /> Quick view</a> */}
-              </div>
-              <figcaption className="info-wrap">
-              <Link 
-                to={{ pathname: '/products/'+data.id}}
-                >
-
-                <h4 className="title text-dots text-capitalize">{data.name}</h4>
-              </Link>
-                <div className="action-wrap">
-                  {/* <a href="#" className="btn btn-primary btn-sm float-right"> Order </a> */}
-                  <div className="price-wrap h5">
-                    <span className="price-new">$1280</span>
-                    <del className="price-old">$1980</del>
-                  </div> 
-                </div> 
-              </figcaption>
-            </figure> 
-          </div> 
-
-            // <div class="col-lg-3">
-            //     <div class="au-card m-b-30">
-            //         <div class="au-card-inner">
-            //             <Link 
-            //             to={{ pathname: '/products/'+data.id}}
-            //             ><h3 className="title-2 m-b-40">{data.name}</h3></Link>
-            //         <img src="https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg" />
-            //         </div>
-            //     </div>
-            // </div>
-            
-        )
-    }
-}
+import Base from './Config'
+import axios from 'axios'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import ProductsComponent from "./AdditionalComponents/Products"
 
 export default class Products extends Component {
-    constructor(){
-        super()
-        this.state={
-            data:[
-                {id:1,name:"apple"},
-                {id:2,name:"mango"},
-                {id:3,name:"grape"},
-                {id:4,name:"apple"},
-                {id:5,name:"apple"},
-                {id:6,name:"apple"},
-            ]
-        }
+  constructor(){
+    super()
+    this.state={
+        data:[],
+        next:null,
+        prev:null,
+        loading:true,
     }
+  }
+
+  loading=(args)=>{
+      this.setState({
+          loading:args
+      })
+  }
+
+  componentDidMount(){
+      this.fetchAllData()
+  }
+
+  next=()=>{
+      this.loading(true)
+      axios.get(
+        this.state.next,
+        { 
+            headers: { 
+              'Authorization': 'Token '+localStorage.getItem('ecommerce_token'),
+            } 
+        }
+      ).then(response =>{
+        this.setState({
+          data:response.data.results,
+          next:response.data.next,
+          prev:response.data.previous,
+          loading:false, 
+
+        })
+      })
+      .catch(error =>{
+          NotificationManager.error('Error : ', error, 3000);
+      })
+  }
+
+  prev=()=>{
+      this.loading(true)
+      axios.get(
+        this.state.prev,
+        { 
+            headers: { 
+                'Authorization': 'Token '+localStorage.getItem('ecommerce_token'),
+            } 
+        }
+      ).then(response =>{
+        this.setState({
+          data:response.data.results,
+          next:response.data.next,
+          prev:response.data.previous,
+          loading:false,
+        })
+      })
+      .catch(error =>{
+          NotificationManager.error('Error : ', error, 3000);
+      })
+  }
+
+  fetchAllData=()=>{
+    axios.get(
+        Base.url + 'items/?attach_stock=0',
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    ).then(response => {
+        console.log('Response all :', response);
+        // console.log('Response all :', response.data.results);
+        this.setState({
+          data: response.data.results,
+          next: response.data.next,
+          prev: response.data.previous,
+        })
+        
+
+    }).catch(error => {
+        console.log('Error loading quotation count: ', error);
+        NotificationManager.error('Error : ', error, 3000);
+    })
+
+  }
     
     render() {
         return (

@@ -3,10 +3,12 @@ import React from 'react';
 import Header from "./Components/Header"
 import HeaderDesktop from "./Components/HeaderDesktop"
 import PageHead from "./Components/PageHead"
-import axios from 'axios'
 import Base from './Config'
+import axios from 'axios'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Orders from './AdditionalComponents/Orders'
+
+import OrderStatusModal from "./AdditionalComponents/OrderStatusModal"
 
 
 class App extends React.Component {
@@ -14,9 +16,15 @@ class App extends React.Component {
     super()
     this.state={
         data:[],
+        status_data:[],
         next:null,
         prev:null,
         loading:true,
+
+        statusModal:false,
+        orderid:"",
+        itemStatus:"",
+        status_name:""
     }
   }
 
@@ -29,6 +37,8 @@ class App extends React.Component {
   componentDidMount(){
       this.fetchAllData()
   }
+
+  
 
   next=()=>{
       this.loading(true)
@@ -99,11 +109,63 @@ class App extends React.Component {
     })
 
   }
-  
+  changeStatus=(id,status,name)=>{
+    console.log('change stgatus of ',id);
+    this.setState({
+      orderid:id,
+      statusModal:true,
+      itemStatus:status,
+      status_name:name  
+    })
+    
+  }
+
+
+  statusChange=(orderid,statusid,desc)=>{
+        
+    var bodyFormData = new FormData();
+    bodyFormData.set('keyword', "change_status");
+    bodyFormData.set('order_id', orderid);
+    bodyFormData.set('status_id', statusid);
+    bodyFormData.set('description', desc);
+    axios.patch(
+        Base.url + 'order/',
+        bodyFormData,
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    )
+    .then(response =>{
+        console.log('response : ',response);
+        if(response.data.Status){
+            alert(response.data.Message)
+            this.fetchAllData()
+        }else{
+            console.log(response.data.Message);
+            alert(response.data.Message+" : "+response.data.Error)
+        }
+    })
+    .catch(error=>{
+        console.log(error);
+    })
+  }
+
   render(){
     return (
 
       <div>
+        <OrderStatusModal
+          show={this.state.statusModal}
+          onHide={() => this.setState({ statusModal: false })}
+          orderid={this.state.orderid}
+          statusid={this.state.itemStatus}
+          status={this.state.status_name}
+
+          change={this.statusChange}
+        />
+  
        <div className="page-wrapper">
          <Header/>
          {/* <Navigation/> */}
@@ -115,103 +177,113 @@ class App extends React.Component {
              <div className="section__content section__content--p30">
                <div className="container-fluid">
                  <PageHead name="Orders" button="true" buttonName="Order"/>
-                
+
                  <div className="row">
-                   <div className="col-lg-12">
-                     {/* <h2 className="title-1 m-b-25">Earnings By Items</h2> */}
-                     <div className="table-responsive table--no-card m-b-40">
-                       <table className="table table-borderless table-striped table-earning">
-                         <thead>
-                           <tr>
+                  <div className="col-md-12">
+                    {/* DATA TABLE */}
+                    {/* <h3 className="title-5 m-b-35">data table</h3> */}
+                    {/* <div className="table-data__tool">
+                      <div className="table-data__tool-left">
+                        <div className="rs-select2--light rs-select2--md">
+                          <select className="js-select2" name="property">
+                            <option selected="selected">All Properties</option>
+                            <option value>Option 1</option>
+                            <option value>Option 2</option>
+                          </select>
+                          <div className="dropDownSelect2" />
+                        </div>
+                        <div className="rs-select2--light rs-select2--sm">
+                          <select className="js-select2" name="time">
+                            <option selected="selected">Today</option>
+                            <option value>3 Days</option>
+                            <option value>1 Week</option>
+                          </select>
+                          <div className="dropDownSelect2" />
+                        </div>
+                        <button className="au-btn-filter">
+                          <i className="zmdi zmdi-filter-list" />filters</button>
+                      </div>
+                      <div className="table-data__tool-right">
+                        <div className="rs-select2--dark rs-select2--sm rs-select2--dark2">
+                          <select className="js-select2" name="type">
+                            <option selected="selected">Export</option>
+                            <option value>Option 1</option>
+                            <option value>Option 2</option>
+                          </select>
+                          <div className="dropDownSelect2" />
+                        </div>
+                      </div>
+                    </div> */}
+{/* 
+                    <div className="au-card au-card--no-pad pt-1 pb-1 pl-2">
+                      <div className="rs-select2--light rs-select2--md">
+                        <select className="js-select2" name="property">
+                          <option selected="selected">All Properties</option>
+                          <option value>Option 1</option>
+                          <option value>Option 2</option>
+                        </select>
+                        <div className="dropDownSelect2" />
+                      </div>
+                      <div className="rs-select2--light rs-select2--sm">
+                        <select className="js-select2" name="time">
+                          <option selected="selected">Today</option>
+                          <option value>3 Days</option>
+                          <option value>1 Week</option>
+                        </select>
+                        <div className="dropDownSelect2" />
+                      </div>
+                        <button className="au-btn-filter">
+                          <i className="zmdi zmdi-filter-list" />filters</button>
+                        <div className="rs-select2--dark rs-select2--sm rs-select2--dark2 mr-0">
+                          <select className="js-select2" name="type">
+                            <option selected="selected">Export</option>
+                            <option value>Option 1</option>
+                            <option value>Option 2</option>
+                          </select>
+                          <div className="dropDownSelect2" />
+                        </div>
+                    </div>
+                       */}
+
+                    <div className="table-responsive table--no-card m-b-40">
+                      <table className="table table-data2">
+                      {/* <table className="table table-data2 table-striped"> */}
+                        <thead>
+                          <tr>
                              <th>Date</th>
                              <th>order ID</th>
                              <th>User</th>
                              <th>Phone</th>
-                             <th>Status</th>
+                             <th className="text-right">Status</th>
                              <th className="text-right">Amount</th>
+                             <th className="text-right">
+                              <button className="au-btn au-btn-icon au-btn--green au-btn--small mr-2" title="previous">
+                              <i className="fa fa-arrow-left text-black-50" aria-hidden="true"/></button>
+                              <button className="au-btn au-btn-icon au-btn--green au-btn--small" title="next">
+                              <i className="fa fa-arrow-right text-black-50" aria-hidden="true"/></button>
+                            </th>
                              {/* <th className="text-right">quantity</th> */}
                            </tr>
-                         </thead>
-                         <tbody>
-                            {this.state.data.map((item,index)=><Orders 
-                              data={item} 
-                              key={index}
-                              />
-                              )
-                            }
+                        </thead>
+                        <tbody>
+                          {this.state.data.map((item,index)=>
+                          <Orders 
+                            data={item} 
+                            key={index}
+                            changeStatus={this.changeStatus}
+                            />
+                            )
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                    {/* END DATA TABLE */}
 
-                           {/* <tr>
-                             <td>2018-09-29 05:57</td>
-                             <td>100398</td>
-                             <td>iPhone X 64Gb Grey</td>
-                             <td className="text-right">$999.00</td>
-                             <td className="text-right">1</td>
-                             <td className="text-right">$999.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-28 01:22</td>
-                             <td>100397</td>
-                             <td>Samsung S8 Black</td>
-                             <td className="text-right">$756.00</td>
-                             <td className="text-right">1</td>
-                             <td className="text-right">$756.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-27 02:12</td>
-                             <td>100396</td>
-                             <td>Game Console Controller</td>
-                             <td className="text-right">$22.00</td>
-                             <td className="text-right">2</td>
-                             <td className="text-right">$44.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-26 23:06</td>
-                             <td>100395</td>
-                             <td>iPhone X 256Gb Black</td>
-                             <td className="text-right">$1199.00</td>
-                             <td className="text-right">1</td>
-                             <td className="text-right">$1199.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-25 19:03</td>
-                             <td>100393</td>
-                             <td>USB 3.0 Cable</td>
-                             <td className="text-right">$10.00</td>
-                             <td className="text-right">3</td>
-                             <td className="text-right">$30.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-29 05:57</td>
-                             <td>100392</td>
-                             <td>Smartwatch 4.0 LTE Wifi</td>
-                             <td className="text-right">$199.00</td>
-                             <td className="text-right">6</td>
-                             <td className="text-right">$1494.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-24 19:10</td>
-                             <td>100391</td>
-                             <td>Camera C430W 4k</td>
-                             <td className="text-right">$699.00</td>
-                             <td className="text-right">1</td>
-                             <td className="text-right">$699.00</td>
-                           </tr>
-                           <tr>
-                             <td>2018-09-22 00:43</td>
-                             <td>100393</td>
-                             <td>USB 3.0 Cable</td>
-                             <td className="text-right">$10.00</td>
-                             <td className="text-right">3</td>
-                             <td className="text-right">$30.00</td>
-                           </tr> */}
-                           
-                         </tbody>
-                       </table>
-                     </div>
-                   </div>
-     
-                 </div>
-                 
+
+                  </div>
+                </div>
+
+
                </div>
              </div>
            </div>
