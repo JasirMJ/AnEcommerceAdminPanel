@@ -13,6 +13,7 @@ export default class componentName extends PureComponent {
     }
 
     handleChange=(checked)=> {
+        alert("fayis : user deactivate api required")
         console.log('worked');
         
     }

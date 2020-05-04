@@ -9,7 +9,7 @@ export default {
 //     Base.url + 'AdminDashboard/',
 //     {
 //         headers: {
-//             'Authorization': 'Token ' + localStorage.getItem('Token'),
+//             'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
 //         }
 //     }
 // ).then(response => {
@@ -35,7 +35,7 @@ export default {
 //     bodyFormData,
 //      {
 //         headers: {
-//             'Authorization': 'Token ' + localStorage.getItem('Token'),
+//             'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
 //         }
 //     }
 // )
@@ -56,7 +56,7 @@ export default {
 //     Base.url + 'Priority/?id='+data.id,
 //     {
 //         headers: {
-//             'Authorization': 'Token ' + localStorage.getItem('Token'),
+//             'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
 //         }
 //     }
 // )

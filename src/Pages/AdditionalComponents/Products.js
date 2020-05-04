@@ -4,6 +4,7 @@ import React, { Component, PureComponent } from 'react'
 import {
     Link
 } from "react-router-dom";
+import '../product.css'
 
 export default class componentName extends PureComponent {
     constructor() {
@@ -36,12 +37,12 @@ export default class componentName extends PureComponent {
                 to={{ pathname: '/products/' + data.id }}
             >
                         <figcaption className="info-wrap">
-                            <h4 className="title text-dots text-capitalize">{data.name}</h4>
+                            <h4 className="title text-dots text-capitalize h5 text-center" >{data.name}</h4>
                             <div className="action-wrap">
                                 {/* <a href="#" className="btn btn-primary btn-sm float-right"> Order </a> */}
-                                <div className="price-wrap h5">
-                                    <span className="price-new">{data.rate}</span>
-                                    <del className="price-old">$1980</del>
+                                <div className="price-wrap h6 text-center">
+                                    <span className="price-new h6 text-success">{data.rate}</span>
+                                    <del className="price-old h6 text-grey">$1980</del>
                                 </div>
                             </div>
                         </figcaption>

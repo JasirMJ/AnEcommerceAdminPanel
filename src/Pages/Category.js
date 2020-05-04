@@ -1,127 +1,246 @@
 import React from 'react';
 // import './App.css';
 import Header from "./Components/Header"
-import Navigation from "./Components/Navigation"
 import HeaderDesktop from "./Components/HeaderDesktop"
 import PageHead from "./Components/PageHead"
+import Base from './Config'
+import axios from 'axios'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Orders from './AdditionalComponents/Orders'
+
+import OrderStatusModal from "./AdditionalComponents/OrderStatusModal"
+import CategoryList from './AdditionalComponents/Categories';
+import AddCategoryModal from './AdditionalComponents/AddCategoryModal';
 
 
-function App() {
-  return (
+class App extends React.Component {
+  constructor(){
+    super()
+    this.state={
+        data:[],
+        next:null,
+        prev:null,
+        loading:true,
 
- <div>
-  <div className="page-wrapper">
-    <Header/>
-    {/* <Navigation/> */}
-    
-    {/* PAGE CONTAINER */}
-    <div className="page-container">
-      <HeaderDesktop/>
-      {/* MAIN CONTENT */}
-      <div className="main-content">
-        <div className="section__content section__content--p30">
-          <div className="container-fluid">
-            <PageHead name="Category" button="true" buttonName="Category"/>
-           
-           
+        addModal:false,
+    }
+  }
 
-            <div className="row pt-2">
-              <div className="col-lg-12">
-                <div className="table-responsive table--no-card m-b-40">
-                  <table className="table table-borderless table-striped table-earning">
-                    <thead>
-                      <tr>
-                        <th>date</th>
-                        <th>order ID</th>
-                        <th>name</th>
-                        <th className="text-right">price</th>
-                        <th className="text-right">quantity</th>
-                        <th className="text-right">total</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>2018-09-29 05:57</td>
-                        <td>100398</td>
-                        <td>iPhone X 64Gb Grey</td>
-                        <td className="text-right">$999.00</td>
-                        <td className="text-right">1</td>
-                        <td className="text-right">$999.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-28 01:22</td>
-                        <td>100397</td>
-                        <td>Samsung S8 Black</td>
-                        <td className="text-right">$756.00</td>
-                        <td className="text-right">1</td>
-                        <td className="text-right">$756.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-27 02:12</td>
-                        <td>100396</td>
-                        <td>Game Console Controller</td>
-                        <td className="text-right">$22.00</td>
-                        <td className="text-right">2</td>
-                        <td className="text-right">$44.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-26 23:06</td>
-                        <td>100395</td>
-                        <td>iPhone X 256Gb Black</td>
-                        <td className="text-right">$1199.00</td>
-                        <td className="text-right">1</td>
-                        <td className="text-right">$1199.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-25 19:03</td>
-                        <td>100393</td>
-                        <td>USB 3.0 Cable</td>
-                        <td className="text-right">$10.00</td>
-                        <td className="text-right">3</td>
-                        <td className="text-right">$30.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-29 05:57</td>
-                        <td>100392</td>
-                        <td>Smartwatch 4.0 LTE Wifi</td>
-                        <td className="text-right">$199.00</td>
-                        <td className="text-right">6</td>
-                        <td className="text-right">$1494.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-24 19:10</td>
-                        <td>100391</td>
-                        <td>Camera C430W 4k</td>
-                        <td className="text-right">$699.00</td>
-                        <td className="text-right">1</td>
-                        <td className="text-right">$699.00</td>
-                      </tr>
-                      <tr>
-                        <td>2018-09-22 00:43</td>
-                        <td>100393</td>
-                        <td>USB 3.0 Cable</td>
-                        <td className="text-right">$10.00</td>
-                        <td className="text-right">3</td>
-                        <td className="text-right">$30.00</td>
-                      </tr>
-                    </tbody>
-                  </table>
+  loading=(args)=>{
+      this.setState({
+          loading:args
+      })
+  }
+
+  componentDidMount(){
+      this.fetchAllData()
+  }
+
+  
+
+  next=()=>{
+      this.loading(true)
+      axios.get(
+        this.state.next,
+        { 
+            headers: { 
+              'Authorization': 'Token '+localStorage.getItem('ecommerce_token'),
+            } 
+        }
+      ).then(response =>{
+        this.setState({
+          data:response.data.results,
+          next:response.data.next,
+          prev:response.data.previous,
+          loading:false, 
+
+        })
+      })
+      .catch(error =>{
+          NotificationManager.error('Error : ', error, 3000);
+      })
+  }
+
+  prev=()=>{
+      this.loading(true)
+      axios.get(
+        this.state.prev,
+        { 
+            headers: { 
+                'Authorization': 'Token '+localStorage.getItem('ecommerce_token'),
+            } 
+        }
+      ).then(response =>{
+        this.setState({
+          data:response.data.results,
+          next:response.data.next,
+          prev:response.data.previous,
+          loading:false,
+        })
+      })
+      .catch(error =>{
+          NotificationManager.error('Error : ', error, 3000);
+      })
+  }
+
+  fetchAllData=()=>{
+    axios.get(
+        Base.url + 'category/',
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    ).then(response => {
+        console.log('Response all :', response);
+        // console.log('Response all :', response.data.results);
+        this.setState({
+          data: response.data.results,
+          next: response.data.next,
+          prev: response.data.previous,
+        })
+        
+
+    }).catch(error => {
+        console.log('Error loading : ', error);
+        NotificationManager.error('Error : ', error, 3000);
+    })
+
+  }
+
+  saveItem=(data)=>{
+    console.log('data ',data);
+        
+    var bodyFormData = new FormData();
+    bodyFormData.set('name', data.name);
+    bodyFormData.set('parent', data.description);
+
+    axios.post(
+        Base.url + 'category/',
+        bodyFormData,
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    )
+    .then(response =>{
+      console.log('response : ',response);
+      if(response.data.Status){
+          alert(response.data.Message)
+      }else{
+          console.log(response.data.Message);
+          alert(response.data.Message+" : "+response.data.Error)
+      }
+      this.fetchAllData()
+    })
+    .catch(error=>{
+        console.log(error);
+    })
+  }
+  
+  delete=(id)=>{
+        
+    axios.delete(
+        Base.url + 'category/?id='+id,
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    )
+    .then(response =>{
+        console.log('response : ',response);
+            if(response.data.Status){
+                alert(response.data.Message)
+                this.fetchAllData()
+                this.loading(false)
+            }else{
+                console.log(response.data.Message);
+                alert(response.data.Message+" : "+response.data.Error)
+                this.loading(false)
+            }
+    })
+    .catch(error=>{
+        console.log(error);
+    })
+  }
+  
+  render(){
+    return (
+
+      <div>
+        
+  
+       <div className="page-wrapper">
+         <AddCategoryModal
+            show={this.state.addModal}
+            onHide={() => this.setState({ addModal: false })}
+            save={this.saveItem}
+         />
+         <Header/>
+         {/* <Navigation/> */}
+         {/* PAGE CONTAINER */}
+         <div className="page-container">
+           <HeaderDesktop searchplaceholder="Search order" searchbutton="order" />
+           {/* MAIN CONTENT */}
+           <div className="main-content">
+             <div className="section__content section__content--p30">
+               <div className="container-fluid">
+                 <PageHead name="Category" buttonName="category" category={()=>this.setState({addModal:true})}/>
+
+                 <div className="row">
+                  <div className="col-md-12">
+
+                    <div className="table-responsive table--no-card m-b-40">
+                      <table className="table table-data2">
+                      {/* <table className="table table-data2 table-striped"> */}
+                        <thead>
+                          <tr>
+                             <th>Id</th>
+                             <th>Name</th>
+                             {/* <th>User</th>
+                             <th>Phone</th>
+                             <th className="text-right">Status</th>
+                             <th className="text-right">Amount</th> */}
+                             <th className="text-right">
+                              <button className="au-btn au-btn-icon au-btn--green au-btn--small mr-2" title="previous">
+                              <i className="fa fa-arrow-left text-black-50" aria-hidden="true"/></button>
+                              <button className="au-btn au-btn-icon au-btn--green au-btn--small" title="next">
+                              <i className="fa fa-arrow-right text-black-50" aria-hidden="true"/></button>
+                            </th>
+                             {/* <th className="text-right">quantity</th> */}
+                           </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.data.map((item,index)=>
+                            <CategoryList
+                              data={item}
+                              key={index}
+                            />
+                            )
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                    {/* END DATA TABLE */}
+
+
+                  </div>
                 </div>
-              </div>
-              
-            </div>
-            
 
-          </div>
-        </div>
-      </div>
-      {/* END MAIN CONTENT
-      END PAGE CONTAINER */}
-    </div>
-  </div>
 
-</div>
-
-  );
+               </div>
+             </div>
+           </div>
+           {/* END MAIN CONTENT
+           END PAGE CONTAINER */}
+         </div>
+       </div>
+     
+     </div>
+     
+      );
+  }
 }
 export default App

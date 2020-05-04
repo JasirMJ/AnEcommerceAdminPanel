@@ -2,7 +2,7 @@ import axios from 'axios'
 import Base from '../Config'
 import React, { Component ,PureComponent } from 'react'
 
-export default class componentName extends PureComponent {
+export default class BrandList extends PureComponent {
     constructor(){
         super()
         this.state={
@@ -18,7 +18,9 @@ export default class componentName extends PureComponent {
         console.log('item status',this.props.data.status.id);
         this.props.changeStatus(this.props.data.id,this.props.data.status.id,this.props.data.status.name)
     }
-
+    delete=()=>{
+        this.props.delete(this.props.data.id)
+    }
 
     render() {
         console.log('Data ',this.props.data);
@@ -34,10 +36,12 @@ export default class componentName extends PureComponent {
                     <span className="au-checkmark" />
                     </label>
                 </td> */}
-                <td>{data.date.slice(0,10)} {data.date.slice(11,19)}</td>
+                {/* <td></td> */}
                 <td>{data.id}</td>
-                <td className="desc">{data.user.user.first_name}</td>
-                
+                <td className="desc">
+                    {data.name}
+                </td>
+{/*                 
                 <td className="text-left">{data.user.mobile}</td>
                 <td className="text-right">
                     {data.status.name}
@@ -47,35 +51,26 @@ export default class componentName extends PureComponent {
                     </button>
                 </td>
                 <td className="text-right">{data.amount}</td>
-
+*/}
                 <td>
                     <div className="table-data-feature">
-                    <button className="item" data-toggle="tooltip" data-placement="top" title="Send" onClick={()=>alert("Not decided")}>
+                    {/* <button className="item" data-toggle="tooltip" data-placement="top" title="Send" onClick={()=>alert("Not decided")}>
                         <i className="zmdi zmdi-mail-send" />
-                        
-                    </button>
+                    </button> */}
                     <button className="item" data-toggle="tooltip" data-placement="top" title="Edit" onClick={()=>alert("Not decided")}>
                         <i className="zmdi zmdi-edit" />
                     </button>
-                    <button className="item" data-toggle="tooltip" data-placement="top" title="Delete" onClick={()=>alert("Not decided")}>
-                        <i className="zmdi zmdi-delete" />
+                    <button className="item" data-toggle="tooltip" data-placement="top" title="Delete" onClick={this.delete}>
+                        <i className="zmdi zmdi-delete " />
                     </button>
-                    <button className="item" data-toggle="tooltip" data-placement="top" title="More" onClick={()=>alert("fayis : detailed view of single order api required")}>
+                    {/* <button className="item" data-toggle="tooltip" data-placement="top" title="More" onClick={()=>alert("fayis : detailed view of single order api required")}>
                         <i className="zmdi zmdi-more" />
-                    </button>
+                    </button> */}
                     </div>
-                </td>
+                </td> 
                 </tr>
                 <tr className="spacer" />
                 </>
-            // <tr>
-            //     <td>{data.date.slice(0,10)} {data.date.slice(11,19)}</td>
-            //     <td>100398 {data.id}</td>
-            //     <td>{data.user.user.first_name}</td>
-            //     <td className="text-right">{data.user.mobile}</td>
-            //     <td className="text-left">{data.status.name}</td>
-            //     <td className="text-right">{data.amount}</td>
-            // </tr>
         );
     }
 }

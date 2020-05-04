@@ -28,7 +28,8 @@ export default class ProductDetails extends Component {
       selectedFile3:null,
     }
     componentDidMount(){
-        this.getid()
+      alert("fayis : Single product api required")
+      this.getid()
     }
     getid=()=>{
         const id = this.props.match.params.id //  working
