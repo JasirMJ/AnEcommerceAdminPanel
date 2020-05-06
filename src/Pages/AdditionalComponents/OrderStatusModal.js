@@ -32,10 +32,10 @@ export default class OrderStatusModal extends React.Component {
               }
           }
         ).then(response => {
-            console.log('Response all :', response.data.results);
+            console.log('Response all :', response.data);
             // console.log('Response all :', response.data.results);
             this.setState({
-              data: response.data.results,
+              data: response.data,
               // next: response.data.next,
               // prev: response.data.previous,
             })

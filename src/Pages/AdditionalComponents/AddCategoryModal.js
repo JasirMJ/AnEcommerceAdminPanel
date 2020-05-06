@@ -27,7 +27,7 @@ export default class AddCategoryModal extends React.PureComponent {
 
     fetchCategory(){
         axios.get(
-            Base.url + 'category/',
+            Base.url + 'category/?page_wise=0&parent_id=null',
             {
                 headers: {
                     'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
@@ -37,7 +37,7 @@ export default class AddCategoryModal extends React.PureComponent {
             console.log('Response Normal :', response);
 
             this.setState({
-                categoryData: response.data.results,
+                categoryData: response.data,
                 // next: response.data.next,
                 // prev: response.data.previous,
             })
@@ -136,7 +136,7 @@ export default class AddCategoryModal extends React.PureComponent {
 
                     Choose parent category :
                     <div className="form-group">
-                        <select value={this.state.id} name="category" onChange={this.onChange}  className="form-control-sm form-control" style={{borderColor:'#fafafa',boxShadow:'0px 2px 1px #ededed',paddingLeft:18}}  id="fruit" >
+                        <select value={this.state.parent} name="parent" onChange={this.onChange}  className="form-control-sm form-control" style={{borderColor:'#fafafa',boxShadow:'0px 2px 1px #ededed',paddingLeft:18}}  id="fruit" >
                             <option value='' >Select category</option>
                             {  this.state.categoryData.map((option,index) =>{
                                 return <option key={index} value={option.id} name={option.name} >{option.name}</option>

@@ -101,6 +101,47 @@ class App extends React.Component {
     })
 
   }
+
+  changeActivation=(id,status)=>{
+    console.log('stat ', status);
+    let stat =""
+    if(status==true){
+      // console.log('true');
+      stat = "dactv"
+      
+    }
+    else{
+      // console.log('false');
+      stat = "actv"
+    }
+    
+    // return false
+    var bodyFormData = new FormData();
+    bodyFormData.set('user_id', id);
+    bodyFormData.set('action', stat);
+    axios.patch(
+        Base.url + 'user/',
+        bodyFormData,
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    )
+    .then(response =>{
+        console.log('response : ',response);
+        if(response.data.Status){
+            alert(response.data.Message)
+        }else{
+            console.log(response.data.Message);
+            alert(response.data.Message+" : "+response.data.Error)
+        }
+        this.fetchAllData()
+    })
+    .catch(error=>{
+        console.log(error);
+    })
+  }
   render(){
     return (
 
@@ -137,6 +178,7 @@ class App extends React.Component {
                       {this.state.data.map((item,index)=><Users 
                         data={item} 
                         key={index}
+                        change={this.changeActivation}
                         />
                         )
                       }

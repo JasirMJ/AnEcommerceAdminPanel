@@ -38,8 +38,11 @@ export default class CategoryList extends PureComponent {
                 </td> */}
                 {/* <td></td> */}
                 <td>{data.id}</td>
-                <td className="desc">
+                <td className="text-capitalize h5">
                     {data.name}
+                </td>
+                <td className="text-capitalize h5 desc">
+                    {data.parent?data.parent.name:"Main Category"}
                 </td>
 {/*                 
                 <td className="text-left">{data.user.mobile}</td>

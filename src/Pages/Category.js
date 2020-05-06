@@ -113,7 +113,7 @@ class App extends React.Component {
         
     var bodyFormData = new FormData();
     bodyFormData.set('name', data.name);
-    bodyFormData.set('parent', data.description);
+    bodyFormData.set('parent', data.parent);
 
     axios.post(
         Base.url + 'category/',
@@ -128,9 +128,12 @@ class App extends React.Component {
       console.log('response : ',response);
       if(response.data.Status){
           alert(response.data.Message)
-      }else{
           console.log(response.data.Message);
+          
+      }else{
           alert(response.data.Message+" : "+response.data.Error)
+          console.log(response.data.Message," : ",response.data.Error);
+
       }
       this.fetchAllData()
     })
@@ -199,6 +202,7 @@ class App extends React.Component {
                           <tr>
                              <th>Id</th>
                              <th>Name</th>
+                             <th>Parent</th>
                              {/* <th>User</th>
                              <th>Phone</th>
                              <th className="text-right">Status</th>

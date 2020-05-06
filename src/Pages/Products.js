@@ -13,6 +13,7 @@ import axios from 'axios'
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import ProductsComponent from "./AdditionalComponents/Products"
 import AddProductModal from './AdditionalComponents/AddProductModal'
+import ViewProductModal from './AdditionalComponents/ViewProductModal'
 
 export default class Products extends Component {
   constructor(){
@@ -24,6 +25,8 @@ export default class Products extends Component {
         loading:true,
 
         productModal:false,
+        viewProductModal:false,
+        viewData:[],
     }
   }
 
@@ -84,7 +87,7 @@ export default class Products extends Component {
 
   fetchAllData=()=>{
     axios.get(
-        Base.url + 'items/?attach_stock=0',
+        Base.url + 'items/?attach_stock=1',
         {
             headers: {
                 'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
@@ -114,6 +117,7 @@ export default class Products extends Component {
     bodyFormData.set('name', data.name);
     bodyFormData.set('description', data.description);
     bodyFormData.set('category', data.category);
+    bodyFormData.set('subcategory', data.subcategory);
     bodyFormData.set('brand', data.brand);
     bodyFormData.set('image', data.image);
     bodyFormData.set('rate', data.rate);
@@ -140,8 +144,45 @@ export default class Products extends Component {
         console.log(error);
     })
     
-  }
-    
+  } 
+    edit=(data)=>{
+      console.log('edit ',data);
+      var bodyFormData = new FormData();
+
+      if(data.image){
+        bodyFormData.set('image', data.image);
+      }
+      bodyFormData.set('id', data.id);
+      bodyFormData.set('name', data.name);
+      bodyFormData.set('description', data.description);
+      bodyFormData.set('category', data.category);
+      bodyFormData.set('subcategory', data.subcategory);
+      bodyFormData.set('brand', data.brand);
+      bodyFormData.set('rate', data.rate);
+      axios.put(
+          Base.url + 'items/',
+          bodyFormData,
+          {
+              headers: {
+                  'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+              }
+          }
+      )
+      .then(response =>{
+        console.log('response : ',response);
+        if(response.data.Status){
+            alert(response.data.Message)
+        }else{
+            console.log(response.data.Message);
+            alert(response.data.Message+" : "+response.data.Error)
+        }
+        this.fetchAllData()
+      })
+      .catch(error=>{
+          console.log(error);
+      })
+      
+    }
     render() {
         return (
           <div>
@@ -149,8 +190,18 @@ export default class Products extends Component {
             <AddProductModal 
               show={this.state.productModal}
               onHide={() => this.setState({ productModal: false })}
-              save={this.saveItem}
+              save={this.fetchAllData}
             />
+
+            <ViewProductModal 
+              show={this.state.viewProductModal}
+              onHide={() => this.setState({ viewProductModal: false })}
+              // save={this.saveItem}
+              data={this.state.viewData}
+              edit={this.fetchAllData}
+              delete={this.fetchAllData}
+            />
+
             <div className="page-wrapper">
               <Header />
               {/* <Navigation/> */}
@@ -163,8 +214,12 @@ export default class Products extends Component {
                   <div className="section__content section__content--p30">
                     <div className="container-fluid">
                       <PageHead name="Products" button="true" buttonName="product" product={()=>this.setState({productModal:true})} />
-                      <div class="row mt-3">
-                        {this.state.data.map((item, index) => <ProductsComponent data={item} key={index} />)}
+                      <div className="row mt-3">
+                        {this.state.data.map((item, index) => <ProductsComponent 
+                        data={item} 
+                        key={index} 
+                        select={(data)=>this.setState({viewProductModal:true,viewData:data})}
+                        />)}
                       </div>
                     </div>
                   </div>
