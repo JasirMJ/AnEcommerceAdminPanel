@@ -11,6 +11,7 @@ import Orders from './AdditionalComponents/Orders'
 import OrderStatusModal from "./AdditionalComponents/OrderStatusModal"
 import CategoryList from './AdditionalComponents/Categories';
 import AddCategoryModal from './AdditionalComponents/AddCategoryModal';
+import EditCategoryModal from './AdditionalComponents/EditCategoryModal';
 
 
 class App extends React.Component {
@@ -18,11 +19,14 @@ class App extends React.Component {
     super()
     this.state={
         data:[],
+        parentData:[],
         next:null,
         prev:null,
         loading:true,
-
+        
+        editModal:false,
         addModal:false,
+        editData:[],
     }
   }
 
@@ -33,7 +37,32 @@ class App extends React.Component {
   }
 
   componentDidMount(){
+    this.fetchParentCategorys()
+
       this.fetchAllData()
+  }
+
+  
+  fetchParentCategorys(){
+    axios.get(
+        Base.url + 'category/?page_wise=0&parent_id=null',
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    ).then(response => {
+        console.log('fetchParentCategorys :', response);
+
+        this.setState({
+            parentData: response.data,
+            // next: response.data.next,
+            // prev: response.data.previous,
+        })
+    }).catch(error => {
+        console.log('Error loading quotation count: ', error);
+        NotificationManager.error('Error : ', error, 3000);
+    })
   }
 
   
@@ -99,7 +128,7 @@ class App extends React.Component {
           next: response.data.next,
           prev: response.data.previous,
         })
-        
+        this.fetchParentCategorys()
 
     }).catch(error => {
         console.log('Error loading : ', error);
@@ -116,6 +145,40 @@ class App extends React.Component {
     bodyFormData.set('parent', data.parent);
 
     axios.post(
+        Base.url + 'category/',
+        bodyFormData,
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    )
+    .then(response =>{
+      console.log('response : ',response);
+      if(response.data.Status){
+          alert(response.data.Message)
+          console.log(response.data.Message);
+          
+      }else{
+          alert(response.data.Message+" : "+response.data.Error)
+          console.log(response.data.Message," : ",response.data.Error);
+
+      }
+      this.fetchAllData()
+    })
+    .catch(error=>{
+        console.log(error);
+    })
+  }
+  editsave=(data)=>{
+    console.log('data ',data);
+        
+    var bodyFormData = new FormData();
+    bodyFormData.set('id', data.id);
+    bodyFormData.set('name', data.name);
+    bodyFormData.set('parent', data.parent);
+
+    axios.put(
         Base.url + 'category/',
         bodyFormData,
         {
@@ -176,6 +239,15 @@ class App extends React.Component {
         
   
        <div className="page-wrapper">
+
+        <EditCategoryModal
+          show={this.state.editModal}
+          onHide={() => this.setState({ editModal: false })}
+          currentData={this.state.editData}
+          parentData={this.state.parentData}
+          save={this.editsave}
+        />
+
          <AddCategoryModal
             show={this.state.addModal}
             onHide={() => this.setState({ addModal: false })}
@@ -190,7 +262,8 @@ class App extends React.Component {
            <div className="main-content">
              <div className="section__content section__content--p30">
                <div className="container-fluid">
-                 <PageHead name="Category" buttonName="category" category={()=>this.setState({addModal:true})}/>
+                 <PageHead name="Category" buttonName="category" category={(data)=>this.setState({addModal:true,editData:data})}/>
+
 
                  <div className="row">
                   <div className="col-md-12">
@@ -221,6 +294,7 @@ class App extends React.Component {
                             <CategoryList
                               data={item}
                               key={index}
+                              edit={(d)=>this.setState({ editModal: true,editData:d },()=>console.log(this.state.editModal))}
                             />
                             )
                           }

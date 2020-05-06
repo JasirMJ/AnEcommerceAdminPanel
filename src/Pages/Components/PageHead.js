@@ -12,6 +12,9 @@ export default class PageHead extends Component {
     else if(this.props.buttonName==="brand"){
       this.props.brand()
     }
+    else if(this.props.buttonName==="notification"){
+      this.props.notification()
+    }
     else{
       console.log('undefined function call');
     }

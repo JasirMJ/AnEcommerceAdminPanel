@@ -2,6 +2,8 @@ import axios from 'axios'
 import Base from '../Config'
 import React, { Component ,PureComponent } from 'react'
 
+// import EditCategoryModal from './EditCategoryModal'
+
 export default class CategoryList extends PureComponent {
     constructor(){
         super()
@@ -10,25 +12,34 @@ export default class CategoryList extends PureComponent {
             next:null,
             prev:null,
             loading:true,
+
+            editModal: false,
+            
         }
     }
 
     edit=()=>{
-        console.log('item id',this.props.data.id);
-        console.log('item status',this.props.data.status.id);
-        this.props.changeStatus(this.props.data.id,this.props.data.status.id,this.props.data.status.name)
+        // this.setState({ editModal: true })
+        this.props.edit(this.props.data)
+
+        // console.log('item id',this.props.data.id);
+        // console.log('item status',this.props.data.status.id);
+        // this.props.changeStatus(this.props.data.id,this.props.data.status.id,this.props.data.status.name)
+
     }
     delete=()=>{
         this.props.delete(this.props.data.id)
     }
 
     render() {
-        console.log('Data ',this.props.data);
+        // console.log('Data ',this.props.data);
+        // console.log('parentData ',this.props.parentData);
         const data = this.props.data
         // const date = new Date(data.date)
         
         return (
             <>
+            
             <tr className="tr-shadow">
                 {/* <td>
                     <label className="au-checkbox">
@@ -60,7 +71,7 @@ export default class CategoryList extends PureComponent {
                     {/* <button className="item" data-toggle="tooltip" data-placement="top" title="Send" onClick={()=>alert("Not decided")}>
                         <i className="zmdi zmdi-mail-send" />
                     </button> */}
-                    <button className="item" data-toggle="tooltip" data-placement="top" title="Edit" onClick={()=>alert("Not decided")}>
+                    <button className="item" data-toggle="tooltip" data-placement="top" title="Edit" onClick={this.edit}>
                         <i className="zmdi zmdi-edit" />
                     </button>
                     <button className="item" data-toggle="tooltip" data-placement="top" title="Delete" onClick={this.delete}>

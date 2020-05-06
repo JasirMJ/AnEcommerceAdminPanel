@@ -157,7 +157,9 @@ class App extends React.Component {
       <div className="main-content">
         <div className="section__content section__content--p30">
           <div className="container-fluid">
-            <PageHead name="Users" button="true" buttonName={"User"} />
+            <PageHead name="Users"
+            // buttonName={"User"} 
+            />
            
             <div className="row">
               <div className="col-lg-12">

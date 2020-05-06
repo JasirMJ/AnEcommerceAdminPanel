@@ -11,6 +11,7 @@ import Orders from './AdditionalComponents/Orders'
 import OrderStatusModal from "./AdditionalComponents/OrderStatusModal"
 import BrandList from './AdditionalComponents/Brands';
 import AddBrandModal from './AdditionalComponents/AddBrandModal';
+import EditBrandModal from './AdditionalComponents/EditBrandModal';
 
 
 class App extends React.Component {
@@ -23,6 +24,8 @@ class App extends React.Component {
         loading:true,
 
         addModal:false,
+        editModal:false,
+        editData:"",
     }
   }
 
@@ -166,6 +169,41 @@ class App extends React.Component {
         console.log(error);
     })
   }
+
+
+  editsave=(data)=>{
+    console.log('edit data ',data);
+        
+    var bodyFormData = new FormData();
+    bodyFormData.set('id', data.id);
+    bodyFormData.set('name', data.name);
+
+    axios.put(
+        Base.url + 'brand/',
+        bodyFormData,
+        {
+            headers: {
+                'Authorization': 'Token ' + localStorage.getItem('ecommerce_token'),
+            }
+        }
+    )
+    .then(response =>{
+      console.log('response : ',response);
+      if(response.data.Status){
+          alert(response.data.Message)
+          console.log(response.data.Message);
+          
+      }else{
+          alert(response.data.Message+" : "+response.data.Error)
+          console.log(response.data.Message," : ",response.data.Error);
+
+      }
+      this.fetchAllData()
+    })
+    .catch(error=>{
+        console.log(error);
+    })
+  }
   
   render(){
     return (
@@ -174,6 +212,13 @@ class App extends React.Component {
         
   
        <div className="page-wrapper">
+
+         <EditBrandModal
+          show={this.state.editModal}
+          onHide={() => this.setState({ editModal: false })}
+          currentData={this.state.editData}
+          save={this.editsave}
+         />
          <AddBrandModal
             show={this.state.addModal}
             onHide={() => this.setState({ addModal: false })}
@@ -220,6 +265,8 @@ class App extends React.Component {
                               data={item}
                               key={index}
                               delete={this.delete}
+                              edit={(d)=>this.setState({ editModal: true,editData:d },()=>console.log(this.state.editModal))}
+
                             />
                             )
                           }

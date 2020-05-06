@@ -14,9 +14,7 @@ export default class BrandList extends PureComponent {
     }
 
     edit=()=>{
-        console.log('item id',this.props.data.id);
-        console.log('item status',this.props.data.status.id);
-        this.props.changeStatus(this.props.data.id,this.props.data.status.id,this.props.data.status.name)
+        this.props.edit(this.props.data)
     }
     delete=()=>{
         this.props.delete(this.props.data.id)
@@ -57,7 +55,7 @@ export default class BrandList extends PureComponent {
                     {/* <button className="item" data-toggle="tooltip" data-placement="top" title="Send" onClick={()=>alert("Not decided")}>
                         <i className="zmdi zmdi-mail-send" />
                     </button> */}
-                    <button className="item" data-toggle="tooltip" data-placement="top" title="Edit" onClick={()=>alert("Not decided")}>
+                    <button className="item" data-toggle="tooltip" data-placement="top" title="Edit" onClick={this.edit}>
                         <i className="zmdi zmdi-edit" />
                     </button>
                     <button className="item" data-toggle="tooltip" data-placement="top" title="Delete" onClick={this.delete}>
